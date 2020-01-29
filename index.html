@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TODO APP</title>
+  <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+</head>
+<body>
+  <div id="root" />
+  <script src="models/timeStamp.js"></script>
+  <script src="models/TodoItem.js"></script>
+  <script src="models/TodoList.js"></script>
+  <script type="text/babel">
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    const todoList = new TodoList('todo-list', this);
+    this.state = {
+      todoList: todoList,
+      inputText: "",
+      showFinished: false
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>TODO LIST</h1>
+        {
+          !this.state.showFinished ? (
+            <div>
+              <h3>Pending tasks</h3>
+              {
+                this.state.todoList.todoItems.map((item) => !item.done ? (
+                  <div key={item.content}>
+                    <input type="checkbox" defaultChecked={item.done} onChange={() => {
+                      item.finishTask();
+                    }}/>
+                    <span>{item.content}</span>
+                    <span style={{ fontSize: '12px', color: 'grey', padding: '0 10px' }}>{ "Created at: " + item.createdAt}</span>
+                    <button type="button" onClick={() => {
+                      item.removeTask();
+                    }}>X</button>
+                  </div>
+                ) : null)
+              }
+              <p>
+                <input type="text" value={this.state.inputText} onChange={(event) => {
+                  this.setState({ inputText: event.target.value });
+                }} />
+                <button type="button" onClick={() => {
+                  this.state.todoList.addTask(this.state.inputText);
+                }}>ADD</button>
+              </p>
+              <p>
+                <button onClick={() => {
+                  this.setState({ showFinished: true });
+                }}>VIEW COMPLETED</button>
+              </p>
+            </div>
+          ) : (
+            <div>
+              <h3>Completed tasks</h3>
+              {
+                this.state.todoList.todoItems.map((item) => item.done ? (
+                  <div key={item.createdAt}>
+                    <span>{item.content}</span>
+                    <span style={{ fontSize: '12px', color: 'grey', padding: '0 10px' }}>{ "Created at: " + item.createdAt}</span>
+                    <button type="button" onClick={() => {
+                      item.removeTask();
+                    }}>X</button>
+                  </div>
+                ) : null)
+              }
+              <p>
+                <button onClick={() => {
+                  this.setState({ showFinished: false })
+                }}>RETURN</button>
+              </p>
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
