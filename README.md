@@ -14,7 +14,7 @@ A simple React todo app that runs in the browser. This project does not have any
 ## Constraints
 - You are not allowed to import any other external libraries
 - The code must be runnable on latest Google Chrome browser
-- Time limit is 1 hour
+- You may refer to any online resources
 - Commits should be atomic
 
 ## Evaluation
